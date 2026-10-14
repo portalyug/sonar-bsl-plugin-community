@@ -5,7 +5,7 @@
 
 ## Часть 1. Синхронизация форков с оригиналами
 
-GitHub не обновляет форки автоматически. Чтобы получить свежий код из оригинальных репозиториев, нужно добавить `upstream` и смержить.
+GitHub не обновляет форки автоматически. Чтобы получить свежий код из оригинальных репозиториев, нужно обновить форки bsl-language-server и sonar-bsl-plugin-community командой "Sync fork" на главной странице репозитория, либо вручную в локальном репозитории добавить `upstream` и смержить.
 
 ### 1.1. bsl-language-server
 
@@ -78,17 +78,7 @@ git tag v1.0.7-fork
 # Версия проекта теперь автоматически станет "1.0.7-fork"
 ```
 
-### 2.2. Проверяем группу и артефакт
-
-В `build.gradle.kts` строка `group = "io.github.1c-syntax"` [остаётся как есть](https://github.com/1c-syntax/bsl-language-server/blob/develop/build.gradle.kts). Имя проекта берётся из `settings.gradle.kts` — это `bsl-language-server`. Получаются Maven-координаты:
-
-```
-io.github.1c-syntax:bsl-language-server:1.0.7-fork
-```
-
-Менять `group` не нужно — так проще подключать в sonar-плагине: меняется только версия.
-
-### 2.3. Публикуем в локальный Maven-репозиторий
+### 2.2. Публикуем в локальный Maven-репозиторий
 
 ```bash
 ./gradlew publishToMavenLocal
@@ -139,7 +129,9 @@ implementation("io.github.1c-syntax:bsl-language-server:1.0.7-fork")
 Группа и имя артефакта не меняются — меняется только версия, которая соответствует тегу, который вы создали.
 
 
-Если при запуске тестов часть падает с ошибкой "Sentry SDK has detected a mix of versions", то необходимо в зависимости добавить строку:
+Если при запуске тестов часть падает с ошибкой "Sentry SDK has detected a mix of versions", то необходимо в зависимости добавить строку с актуальной на данный момент версией io.sentry:sentry-bom.
+
+Пример:
 
 ```kotlin
 implementation(platform("io.sentry:sentry-bom:8.58.0"))
@@ -150,8 +142,8 @@ implementation(platform("io.sentry:sentry-bom:8.58.0"))
 
 ```bash
 cd sonar-bsl-plugin-community
-git tag 1.1.1 <- текущая версия плагина
-git checkout 1.1.1
+git tag v1.1.1-portalug <- текущая версия плагина
+git checkout v1.1.1-portalug
 ./gradlew build
 ```
 
